@@ -9,13 +9,13 @@ Service to process car data
 ## Database Schema
 ```
 Car (
-  id int primary key,
+  id integer primary key,
   name varchar(255),
   brand_id int reference brand(id)
 )
 
 brand (
-  id int primary key,
+  id integer primary key,
   name varchar(255)
 )
 
