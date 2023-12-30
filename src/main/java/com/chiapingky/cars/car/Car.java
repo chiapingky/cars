@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String name;
     @ManyToOne
     @JoinColumn(name = "brand_id")

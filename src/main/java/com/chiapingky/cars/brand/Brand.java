@@ -1,7 +1,14 @@
 package com.chiapingky.cars.brand;
 
 import com.chiapingky.cars.car.Car;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.util.List;
 
@@ -10,7 +17,7 @@ import java.util.List;
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String name;
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     private List<Car> cars;
@@ -36,6 +43,7 @@ public class Brand {
         return name;
     }
 
+    @JsonIgnore
     public List<Car> getCars() {
         return cars;
     }

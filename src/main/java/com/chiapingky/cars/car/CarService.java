@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CarService {
@@ -24,21 +23,20 @@ public class CarService {
     }
 
     public Car insertCar(Car car) {
-        Optional<Car> carExist = carRepository.getCarByName(car.getName());
-        if (carExist.isPresent()) {
-            return null;
+        if (carRepository.getCarByNameAndBrandId(car.getName(), car.getBrand().getId()).isPresent()) {
+            throw new IllegalStateException("Car already exist");
         }
         carRepository.save(car);
-        return carRepository.getCarByName(car.getName()).orElse(null);
+        return carRepository.getCarByNameAndBrandId(car.getName(), car.getBrand().getId()).orElse(null);
     }
 
     public Car deleteCar(Car car) {
-        Optional<Car> carExist = carRepository.getCarByNameAndBrandId(car.getName(), car.getBrand().getId());
-        Car result = null;
-        if (carExist.isPresent()) {
-            result = carExist.get();
-            carRepository.delete(result);
+        Car carExist = carRepository.getCarByNameAndBrandId(car.getName(), car.getBrand().getId()).orElse(null);
+        if (carExist != null) {
+            carRepository.delete(carExist);
+            return carExist;
+        } else {
+            throw new IllegalStateException("Car does not exist");
         }
-        return result;
     }
 }

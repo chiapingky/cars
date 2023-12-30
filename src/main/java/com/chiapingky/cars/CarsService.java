@@ -7,11 +7,7 @@ import com.chiapingky.cars.car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class CarsService {
@@ -24,60 +20,36 @@ public class CarsService {
         this.brandService = brandService;
     }
 
-    public List<CarResponse> getAllCars() {
-        List<CarResponse> result = new ArrayList<>();
-        List<Car> cars = carService.getAllCar();
-        Map<Integer, Brand> brands = brandService.getAllBrand().stream().collect(Collectors.toMap(Brand::getId, Function.identity()));
-        cars.forEach(c ->{
-                result.add(new CarResponse(c.getId(), c.getName(), brands.get(c.getBrand().getId()).getName()));
-        });
-        return result;
+    public List<Car> getAllCars() {
+        return carService.getAllCar();
     }
 
-    public List<CarResponse> getCarsByBrand(String brand) {
+    public List<Car> getCarsByBrand(String brand) {
         if (brand == null) {
             return getAllCars();
         } else if (brand.isEmpty()) {
             throw new IllegalStateException("Brand must not be empty");
         }
-        List<Car> cars = carService.getCarByBrandName(brand);
-        List<CarResponse> result = new ArrayList<>();
-        cars.forEach( c -> {
-            result.add(new CarResponse(c.getId(), c.getName(), brand));
-        });
-        return result;
+        return carService.getCarByBrandName(brand);
     }
 
     public Brand insertBrand(String brand) {
-        Brand newBrand = brandService.insertBrand(new Brand(brand));
-        if (newBrand == null) {
-            throw new IllegalStateException("Brand already exist");
-        }
-        return newBrand;
+        return brandService.insertBrand(new Brand(brand));
     }
 
     public Brand deleteBrand(String brand) {
-        Brand deleted = brandService.deleteBrand(new Brand(brand));
-        if (deleted == null) {
-            throw new IllegalStateException("Brand does not exist");
-        }
-        return deleted;
+        return brandService.deleteBrand(new Brand(brand));
     }
 
     public Car insertCar(String name, String brand) {
-        Brand brandExist = brandService.getBrandByName(brand);
-        if (brandExist == null) {
-            brandExist = brandService.insertBrand(new Brand(brand));
-            if (brandExist == null) {
-                throw new IllegalStateException("Trouble when inserting car. Check your brand name");
-            }
+        Brand brandExist;
+        try {
+            brandExist = insertBrand(brand);
             System.out.println("Brand does not exist, new brand inserted");
+        } catch (IllegalStateException e) {
+            brandExist = brandService.getBrandByName(brand);
         }
-        Car newCar = carService.insertCar(new Car(name, brandExist));
-        if (newCar == null) {
-            throw new IllegalStateException("Car already exist");
-        }
-        return newCar;
+        return carService.insertCar(new Car(name, brandExist));
     }
 
     public Car deleteCar(String name, String brand) {
@@ -85,10 +57,6 @@ public class CarsService {
         if (brandExist == null) {
             throw new IllegalStateException("Brand does not exist");
         }
-        Car deleted = carService.deleteCar(new Car(name, brandExist));
-        if (deleted == null) {
-            throw new IllegalStateException("Car does not exist");
-        }
-        return deleted;
+        return carService.deleteCar(new Car(name, brandExist));
     }
 }

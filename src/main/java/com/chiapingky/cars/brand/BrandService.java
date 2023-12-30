@@ -3,9 +3,6 @@ package com.chiapingky.cars.brand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class BrandService {
     private final BrandRepository brandRepository;
@@ -15,30 +12,25 @@ public class BrandService {
         this.brandRepository = brandRepository;
     }
 
-    public List<Brand> getAllBrand() {
-        return brandRepository.findAll();
-    }
-
     public Brand getBrandByName(String name) {
         return brandRepository.getBrandByName(name).orElse(null);
     }
 
     public Brand insertBrand(Brand brand) {
-        Optional<Brand> brandExist = brandRepository.getBrandByName(brand.getName());
-        if (brandExist.isPresent()) {
-            return null;
+        if (getBrandByName(brand.getName()) != null) {
+            throw new IllegalStateException("Brand already exist");
         }
         brandRepository.save(brand);
-        return brandRepository.getBrandByName(brand.getName()).orElse(null);
+        return getBrandByName(brand.getName());
     }
 
     public Brand deleteBrand(Brand brand) {
-        Optional<Brand> brandExist = brandRepository.getBrandByName(brand.getName());
-        Brand result = null;
-        if (brandExist.isPresent()) {
-            result = brandExist.get();
-            brandRepository.delete(result);
+        Brand brandExist = getBrandByName(brand.getName());
+        if (brandExist != null) {
+            brandRepository.delete(brandExist);
+            return brandExist;
+        } else {
+            throw new IllegalStateException("Brand does not exist");
         }
-        return result;
     }
 }
