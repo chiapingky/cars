@@ -9,7 +9,6 @@ Feature: insert data scenario success and fail
         And method GET
         * print response
         Then match response != null
-        And match response != null
 
     @ignore @ScenarioName:readEmpty
     Scenario: insert existing data and failed

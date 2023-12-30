@@ -17,7 +17,7 @@ Feature: insert data scenario success and fail
             {
               id: '#number',
               name: '#string',
-              brandId: '#number'
+              brand: '#object'
             }
             """
         And match response contains resultSchema
