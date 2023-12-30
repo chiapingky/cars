@@ -1,0 +1,10 @@
+CREATE USER carservice WITH PASSWORD 'car123';
+
+CREATE DATABASE cars;
+
+GRANT ALL PRIVILEGES ON DATABASE cars TO carservice;
+GRANT ALL PRIVILEGES ON DATABASE cars TO postgres;
+
+\c cars
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO carservice;

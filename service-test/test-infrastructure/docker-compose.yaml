@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgresdb
+    ports:
+      - 5432:5432
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      - POSTGRES_PASSWORD=admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "cars"]
+      interval: 5s
+      timeout: 3s
+      retries: 100
+
+  cars:
+    image: openjdk:17-jdk
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    volumes:
+      - ../../build/libs/cars-0.0.1-SNAPSHOT.jar:/service.jar
+    entrypoint: ["java", "-jar", "-Dspring.profiles.active=local", "service.jar"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://cars:8080/health || exit 1"]
+      interval: 3s
+      timeout: 1s
+      retries: 10
