@@ -33,7 +33,7 @@ public class CarService {
     }
 
     public Car deleteCar(Car car) {
-        Optional<Car> carExist = carRepository.getCarByNameAndBrandId(car.getName(), car.getBrandId());
+        Optional<Car> carExist = carRepository.getCarByNameAndBrandId(car.getName(), car.getBrand().getId());
         Car result = null;
         if (carExist.isPresent()) {
             result = carExist.get();

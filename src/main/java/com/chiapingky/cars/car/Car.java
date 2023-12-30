@@ -1,9 +1,12 @@
 package com.chiapingky.cars.car;
 
+import com.chiapingky.cars.brand.Brand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,20 +16,22 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private int brandId;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
     public Car() {
     }
 
-    public Car(int id, String name, int brandId) {
+    public Car(int id, String name, Brand brand) {
         this.id = id;
         this.name = name;
-        this.brandId = brandId;
+        this.brand = brand;
     }
 
-    public Car(String name, int brandId) {
+    public Car(String name, Brand brand) {
         this.name = name;
-        this.brandId = brandId;
+        this.brand = brand;
     }
 
     public int getId() {
@@ -37,7 +42,7 @@ public class Car {
         return name;
     }
 
-    public int getBrandId() {
-        return brandId;
+    public Brand getBrand() {
+        return brand;
     }
 }

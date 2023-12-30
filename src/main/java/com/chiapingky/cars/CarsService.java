@@ -29,7 +29,7 @@ public class CarsService {
         List<Car> cars = carService.getAllCar();
         Map<Integer, Brand> brands = brandService.getAllBrand().stream().collect(Collectors.toMap(Brand::getId, Function.identity()));
         cars.forEach(c ->{
-                result.add(new CarResponse(c.getId(), c.getName(), brands.get(c.getBrandId()).getName()));
+                result.add(new CarResponse(c.getId(), c.getName(), brands.get(c.getBrand().getId()).getName()));
         });
         return result;
     }
@@ -73,7 +73,7 @@ public class CarsService {
             }
             System.out.println("Brand does not exist, new brand inserted");
         }
-        Car newCar = carService.insertCar(new Car(name, brandExist.getId()));
+        Car newCar = carService.insertCar(new Car(name, brandExist));
         if (newCar == null) {
             throw new IllegalStateException("Car already exist");
         }
@@ -85,7 +85,7 @@ public class CarsService {
         if (brandExist == null) {
             throw new IllegalStateException("Brand does not exist");
         }
-        Car deleted = carService.deleteCar(new Car(name, brandExist.getId()));
+        Car deleted = carService.deleteCar(new Car(name, brandExist));
         if (deleted == null) {
             throw new IllegalStateException("Car does not exist");
         }
