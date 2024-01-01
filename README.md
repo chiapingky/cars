@@ -52,7 +52,7 @@ brand (
 4. Run `cd service-test/test-infrastructure/` to go to `test-infrastructure` directory
 5. Run `docker compose up cars`
 6. After a few moment you can run `docker ps` to check the containers status
-7. Run `docker ps -q | % { docker rm -f $_ }` to shut down and delete all containers
+7. Run `docker ps -aq | % { docker rm -f $_ }` for Windows or `docker rm -f $(docker ps -aq)` for Unix System to shut down and delete all containers
 
 ### Run API Test
 

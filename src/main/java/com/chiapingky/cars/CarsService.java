@@ -6,6 +6,7 @@ import com.chiapingky.cars.car.Car;
 import com.chiapingky.cars.car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,10 +38,12 @@ public class CarsService {
         return brandService.insertBrand(new Brand(brand));
     }
 
+    @Transactional(rollbackFor = Exception.class) //rollback when cascade delete fail
     public Brand deleteBrand(String brand) {
         return brandService.deleteBrand(new Brand(brand));
     }
 
+    @Transactional(rollbackFor = Exception.class) //rollback when any of the insert fail
     public Car insertCar(String name, String brand) {
         Brand brandExist;
         try {
