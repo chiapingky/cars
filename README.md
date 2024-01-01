@@ -23,11 +23,13 @@ brand (
 
 ## Code Structure
 ```
--root
---service-test
----api-test
----test-infrastructure
---main-module
+- <root>
+-- <internal module>
+-- service-test
+--- test-infrastructure
+--- <api test>
+-- sdk
+--- <sdk module>
 ```
 
 ## Gradlew Commands

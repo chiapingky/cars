@@ -1,28 +1,23 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.2.1' apply false
 }
 
 group = 'com.chiapingky'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	sourceCompatibility = '17'
-}
+subprojects {
+	group = 'com.chiapingky'
 
-repositories {
-	mavenCentral()
-}
+	apply plugin: 'java'
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
+	java {
+		sourceCompatibility = JavaVersion.VERSION_17
+	}
 
-tasks.named('test') {
-	useJUnitPlatform()
+	dependencies {
+		implementation(platform(SpringBootPlugin.BOM_COORDINATES))
+	}
 }

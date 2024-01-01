@@ -22,7 +22,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ../../build/libs/cars-0.0.1-SNAPSHOT.jar:/service.jar
+      - ../../cars-service/build/libs/cars-service.jar:/service.jar
     entrypoint: ["java", "-jar", "-Dspring.profiles.active=local", "service.jar"]
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://cars:8080/health || exit 1"]

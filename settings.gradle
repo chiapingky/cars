@@ -1,2 +1,43 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories{
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
 rootProject.name = 'cars'
+
+def includeAllDirectories() {
+    def directories = rootProject.projectDir;
+    directories.eachDir {directory ->
+        if (isBuildDirectory(directory) && directory.name != "service-test") {
+            include "${directory.path.substring(directories.path.length()).replace(File.separator, ":")}"
+        }
+    }
+}
+
+def includeAllSdkDirectories() {
+    def directories = file("${rootProject.projectDir}/sdk")
+    directories.eachDir { directory ->
+        if (isBuildDirectory(directory))
+            include "${directory.path.substring(rootProject.projectDir.path.length()).replace(File.separator, ":")}"
+    }
+}
+
+def isBuildDirectory(File dir) {
+    return file("$dir/build.gradle").exists()
+}
+
+includeAllDirectories()
+includeAllSdkDirectories()
 includeBuild('service-test')
