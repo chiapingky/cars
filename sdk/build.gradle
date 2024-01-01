@@ -1,0 +1,9 @@
+subprojects {
+    group = 'com.chiapingky'
+
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+    }
+}
